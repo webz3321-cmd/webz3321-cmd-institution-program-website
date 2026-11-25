@@ -2,6 +2,16 @@ import { teamPoints, toppers } from '../lib/store'
 import type { SiteData } from '../lib/store'
 import PenaltyGame from './PenaltyGame'
 
+function EmptyState({ title, text }: { title: string; text: string }) {
+  return (
+    <div className="rounded-3xl bg-white p-8 text-center shadow">
+      <p className="text-3xl">✦</p>
+      <p className="mt-1 font-hand text-3xl font-bold text-orange-600">{title}</p>
+      <p className="mt-1 text-sm text-slate-500">{text}</p>
+    </div>
+  )
+}
+
 export function PageShell({ title, onHome, children }: { title: string; onHome: () => void; children: React.ReactNode }) {
   return (
     <div className="min-h-screen bg-[#fdf6e3]">
@@ -27,7 +37,7 @@ export function ProgramsPage({ data, onHome }: { data: SiteData; onHome: () => v
             {p.description && <p className="mt-2">{p.description}</p>}
           </article>
         ))}
-        {!data.programs.length && <p className="rounded-3xl bg-white p-6 text-center shadow md:col-span-2">No programs added yet — add them in the admin panel.</p>}
+        {!data.programs.length && <div className="md:col-span-2"><EmptyState title="Programs coming soon!" text="No programs added yet — add them in the admin panel and they will appear here." /></div>}
       </div>
     </PageShell>
   )
@@ -57,7 +67,7 @@ export function ResultsPage({ data, onHome }: { data: SiteData; onHome: () => vo
             </div>
           </article>
         ))}
-        {!data.results.length && <p className="rounded-3xl bg-white p-6 text-center shadow">No results published yet.</p>}
+        {!data.results.length && <EmptyState title="No results yet!" text="Results will appear here as soon as they are published." />}
       </div>
     </PageShell>
   )
@@ -75,7 +85,7 @@ export function CandidatesPage({ data, onHome }: { data: SiteData; onHome: () =>
             {c.team && <p className="mt-1 inline-block rounded-full bg-orange-100 px-3 py-0.5 text-sm font-bold text-orange-700">{c.team}</p>}
           </article>
         ))}
-        {!data.candidates.length && <p className="rounded-3xl bg-white p-6 text-center shadow md:col-span-3">No candidates registered yet — register them in the admin panel.</p>}
+        {!data.candidates.length && <div className="md:col-span-3"><EmptyState title="Candidates coming soon!" text="No candidates registered yet — register them in the admin panel and they will appear here." /></div>}
       </div>
     </PageShell>
   )
@@ -88,7 +98,7 @@ export function TeamsPage({ data, onHome }: { data: SiteData; onHome: () => void
   return (
     <PageShell title="Teams" onHome={onHome}>
       <div className="mx-auto max-w-5xl px-4 py-8">
-        {!data.teams.length && <p className="rounded-3xl bg-white p-6 text-center shadow">The teams will line up here once the admin adds them.</p>}
+        {!data.teams.length && <EmptyState title="Teams coming soon!" text="The teams will line up here once the admin adds them." />}
         <div className="grid gap-4 md:grid-cols-2">
           {data.teams.map((t) => {
             const members = data.candidates.filter((c) => c.team === t.name)
@@ -157,7 +167,7 @@ export function GalleryPage({ data, onHome }: { data: SiteData; onHome: () => vo
             <figcaption className="p-3 font-bold">{g.title}</figcaption>
           </figure>
         ))}
-        {!data.gallery.length && <p className="rounded-3xl bg-white p-6 text-center shadow md:col-span-3">No photos yet — add them in the admin panel.</p>}
+        {!data.gallery.length && <div className="md:col-span-3"><EmptyState title="Gallery coming soon!" text="No photos yet — add them in the admin panel and they will appear here." /></div>}
       </div>
     </PageShell>
   )
@@ -174,7 +184,7 @@ export function UpdatesPage({ data, onHome }: { data: SiteData; onHome: () => vo
             {u.text && <p className="mt-1">{u.text}</p>}
           </article>
         ))}
-        {!data.updates.length && <p className="rounded-3xl bg-white p-6 text-center shadow">No updates yet.</p>}
+        {!data.updates.length && <EmptyState title="No updates yet!" text="News and updates will appear here when they are added." />}
       </div>
     </PageShell>
   )
@@ -190,7 +200,7 @@ export function DownloadsPage({ data, onHome }: { data: SiteData; onHome: () => 
             {d.url ? <a href={d.url} target="_blank" rel="noreferrer" className="rounded-full bg-orange-500 px-4 py-2 font-bold text-white">Download</a> : <span className="text-sm text-slate-400">No link yet</span>}
           </article>
         ))}
-        {!data.downloads.length && <p className="rounded-3xl bg-white p-6 text-center shadow">No downloads yet.</p>}
+        {!data.downloads.length && <EmptyState title="No downloads yet!" text="Files and brochures will appear here when they are added." />}
       </div>
     </PageShell>
   )

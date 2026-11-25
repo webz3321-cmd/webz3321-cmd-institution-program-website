@@ -70,17 +70,20 @@ export default function PenaltyGame() {
   if (!started) {
     return (
       <div className="relative flex min-h-[80vh] flex-col items-center justify-center overflow-hidden bg-[#f97316] px-4 text-center text-white">
-        <div className="absolute inset-0 opacity-30" aria-hidden>
+        {/* decorative circles must never block clicks */}
+        <div className="pointer-events-none absolute inset-0 opacity-30" aria-hidden>
           <div className="absolute left-[8%] top-[12%] h-16 w-16 rounded-full border-2 border-white" />
           <div className="absolute right-[10%] top-[55%] h-24 w-24 rounded-full border-2 border-white" />
           <div className="absolute bottom-[8%] left-[20%] h-12 w-12 rounded-full border-2 border-white" />
         </div>
+        <div className="relative z-10 flex flex-col items-center">
         <p className="font-hand text-4xl text-yellow-200 md:text-6xl">WE'RE</p>
         <p className="font-hand text-6xl font-bold md:text-8xl">MAKING IT</p>
         <p className="mt-3 max-w-md text-white/90">Results are not out yet — beat the keeper instead. Five penalties, one strong keeper.</p>
         <button onClick={() => setStarted(true)} className="mt-6 rounded-full bg-yellow-300 px-8 py-3 font-hand text-2xl font-bold text-orange-700 shadow-lg hover:scale-105">
           Play Now
         </button>
+        </div>
       </div>
     )
   }
@@ -112,24 +115,38 @@ export default function PenaltyGame() {
         <div className="absolute left-1/2 top-6 h-44 w-3/4 -translate-x-1/2 rounded border-4 border-white bg-white/10 md:h-52">
           <div className="h-full w-full" style={{ backgroundImage: 'linear-gradient(#ffffff33 1px, transparent 1px), linear-gradient(90deg, #ffffff33 1px, transparent 1px)', backgroundSize: '18px 18px' }} />
         </div>
-        {/* keeper */}
+        {/* keeper — drawn: orange No.1 jersey, navy shorts, striped socks, big gold gloves, real face */}
         <div
-          className="absolute left-1/2 top-[16%] z-10 -translate-x-1/2 text-center transition-all"
+          className="absolute left-1/2 top-[10%] z-10 -translate-x-1/2 text-center transition-all"
           style={{
             transform: `translateX(calc(-50% + ${keeper.dive === 'left' ? '-70px' : keeper.dive === 'right' ? '70px' : '0px'})) rotate(${keeper.dive === 'left' ? -38 : keeper.dive === 'right' ? 38 : 0}deg)`,
             transitionDuration: `${Math.max(240, 380 - (level - 1) * 35)}ms`,
           }}
           aria-label="Goalkeeper"
         >
-          <div className="mx-auto flex h-16 w-16 items-center justify-center rounded-full bg-amber-800 text-2xl">🧑🏽</div>
-          <div className="mx-auto -mt-1 flex w-20 items-center justify-center gap-1 rounded-t-xl bg-orange-500 py-1 font-bold text-white">
-            <span className="rounded-full bg-white px-1.5 text-orange-600">1</span>
+          <div className="relative mx-auto h-16 w-16 rounded-full bg-[#8d5a2b] shadow">
+            <span className="absolute left-4 top-6 h-2 w-2 rounded-full bg-slate-900" />
+            <span className="absolute right-4 top-6 h-2 w-2 rounded-full bg-slate-900" />
+            <span className="absolute bottom-3 left-1/2 h-1.5 w-5 -translate-x-1/2 rounded-full bg-slate-900/70" />
+            <span className="absolute -top-1 left-1/2 h-3 w-12 -translate-x-1/2 rounded-full bg-slate-900" />
+          </div>
+          <div className="relative z-10 mx-auto -mt-1 flex w-24 flex-col items-center rounded-t-2xl bg-orange-500 py-1 font-bold text-white shadow">
+            <span className="rounded-full bg-white px-2 text-orange-600">1</span>
+          </div>
+          <div className="mx-auto flex w-20 justify-center gap-1">
+            <span className="h-10 w-4 rounded bg-[#1e293b]" />
+            <span className="h-10 w-4 rounded bg-[#1e293b]" />
           </div>
           <div className="mx-auto flex w-24 justify-between px-1">
-            <span className="flex h-8 w-8 items-center justify-center rounded-full bg-yellow-400 text-lg shadow">🧤</span>
-            <span className="flex h-8 w-8 items-center justify-center rounded-full bg-yellow-400 text-lg shadow">🧤</span>
+            <span className="flex h-9 w-9 items-center justify-center rounded-full bg-yellow-400 text-lg shadow ring-2 ring-yellow-200">✋</span>
+            <span className="flex h-9 w-9 items-center justify-center rounded-full bg-yellow-400 text-lg shadow ring-2 ring-yellow-200">✋</span>
+          </div>
+          <div className="mx-auto mt-1 flex w-20 justify-center gap-3">
+            <span className="h-3 w-6 rounded-full bg-white shadow" style={{ backgroundImage: 'repeating-linear-gradient(90deg,#1e293b 0 4px,#fff 4px 8px)' }} />
+            <span className="h-3 w-6 rounded-full bg-white shadow" style={{ backgroundImage: 'repeating-linear-gradient(90deg,#1e293b 0 4px,#fff 4px 8px)' }} />
           </div>
           {keeper.celebrating && <p className="mt-1 font-hand text-2xl font-bold text-yellow-300">What a save! 🎉</p>}
+          {!keeper.celebrating && keeper.dive === 'centre' && message === 'GOAL!' && <p className="mt-1 font-hand text-xl font-bold text-white/90">oh no…</p>}
         </div>
         {/* ball */}
         {ball && (

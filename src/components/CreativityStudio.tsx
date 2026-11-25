@@ -189,7 +189,14 @@ export default function CreativityStudio({ onClose }: { onClose: () => void }) {
       <div className="pointer-events-none absolute right-4 top-4 z-10 rounded-full bg-orange-500 px-3 py-1 font-hand text-xl text-white">MAKE IT YOUR OWN</div>
       <p className="pointer-events-none absolute right-4 top-16 z-10 font-hand text-3xl text-white drop-shadow">MAKE YOUR MAGIC</p>
       <div className="relative flex-1" style={{ background: BACKGROUNDS[bg].css }}>
-        <div className="absolute inset-0 flex items-center justify-center opacity-25">
+        {/* faint hero scene behind the drawing surface */}
+        <div className="pointer-events-none absolute inset-0 opacity-20" aria-hidden>
+          <span className="absolute left-2 top-2 text-7xl">🤚</span>
+          <span className="absolute bottom-4 left-1/3 text-6xl">⚽</span>
+          <span className="absolute bottom-4 right-6 text-6xl">🎤</span>
+          <p className="absolute left-1/2 top-6 -translate-x-1/2 font-hand text-5xl text-white">MAKE YOUR MAGIC</p>
+        </div>
+        <div className="pointer-events-none absolute inset-0 flex items-center justify-center opacity-25">
           <p className="font-hand text-6xl text-white">Draw here ✎</p>
         </div>
         <canvas

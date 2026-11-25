@@ -1,5 +1,5 @@
 import { useEffect, useMemo, useRef, useState } from 'react'
-import { Menu, X, Play, Pause, Music } from 'lucide-react'
+import { X, Play, Pause, Music } from 'lucide-react'
 import Hero from './components/Hero'
 import Admin from './components/Admin'
 import CreativityStudio from './components/CreativityStudio'
@@ -43,19 +43,32 @@ function useCountdown(dateStr: string) {
 
 function SingingMan() {
   return (
-    <div className="anim-pop flex flex-col items-center" aria-label="Singing man">
-      <span className="anim-note absolute -top-6 left-1 text-xl">♪</span>
-      <span className="anim-note absolute -top-4 right-0 text-lg" style={{ animationDelay: '.7s' }}>♫</span>
-      <div className="relative">
-        <div className="h-12 w-12 rounded-full bg-amber-800" />
-        <div className="anim-sing-mouth absolute bottom-1 left-1/2 h-2 w-4 -translate-x-1/2 rounded-full bg-red-500" />
+    <div className="anim-pop relative flex flex-col items-center" aria-label="Singing man">
+      <span className="anim-note absolute -top-8 left-0 text-2xl">♪</span>
+      <span className="anim-note absolute -top-6 right-0 text-xl" style={{ animationDelay: '.7s' }}>♫</span>
+      <span className="anim-note absolute -top-4 left-6 text-lg" style={{ animationDelay: '1.3s' }}>♩</span>
+      {/* head with open singing mouth */}
+      <div className="relative h-12 w-12 rounded-full bg-[#8d5a2b] shadow">
+        <span className="absolute left-3 top-4 h-1.5 w-1.5 rounded-full bg-slate-900" />
+        <span className="absolute right-3 top-4 h-1.5 w-1.5 rounded-full bg-slate-900" />
+        <span className="anim-sing-mouth absolute bottom-2 left-1/2 h-2.5 w-4 -translate-x-1/2 rounded-full bg-red-500" />
+        <span className="absolute -top-1 left-1/2 h-3 w-10 -translate-x-1/2 rounded-full bg-slate-900" />
       </div>
-      <div className="mt-1 h-16 w-14 rounded-t-2xl bg-orange-500" />
+      {/* lime scarf */}
+      <div className="relative z-10 -mt-1 h-3 w-16 -rotate-2 rounded-full bg-lime-400 shadow" />
+      <div className="h-1.5 w-3 rotate-12 self-end rounded-full bg-lime-500" />
+      {/* orange jacket */}
+      <div className="mt-1 h-16 w-16 rounded-t-3xl bg-orange-500 shadow">
+        <span className="mx-auto mt-2 block h-8 w-1 rounded-full bg-white/50" />
+      </div>
+      {/* arm holding a microphone */}
       <div className="mt-1 flex items-center gap-1">
-        <span className="rounded-full bg-lime-400 px-2 py-0.5 text-xs font-bold">lime scarf</span>
-        <div className="h-3 w-3 rounded-full bg-slate-800" />
+        <span className="h-2 w-8 -rotate-12 rounded-full bg-[#8d5a2b]" />
+        <span className="flex h-5 w-5 items-center justify-center rounded-full bg-slate-800">
+          <span className="h-2 w-2 rounded-full bg-slate-400" />
+        </span>
       </div>
-      <p className="mt-1 rounded-full bg-white px-3 py-0.5 font-hand text-lg text-orange-600 shadow">singing along!</p>
+      <p className="mt-2 rounded-full bg-white px-3 py-0.5 font-hand text-lg text-orange-600 shadow">singing along!</p>
     </div>
   )
 }
@@ -103,7 +116,7 @@ export default function App() {
         className="fixed right-4 top-4 z-50 flex h-14 w-14 items-center justify-center rounded-full bg-[#e64e24] font-hand text-xl font-bold text-white shadow-xl"
         aria-label="Open menu"
       >
-        <Menu />
+        Menu
       </button>
 
       {/* Menu panel — small rounded deep-blue box, Sibaq-style */}
@@ -129,15 +142,16 @@ export default function App() {
 
       {view === 'home' && (
         <>
-          <Hero programName={s.programName} themeLine={s.themeLine} />
+          <Hero programName={s.programName} themeLine={s.themeLine} date={s.date} time={s.time} venue={s.venue} institutionName={s.institutionName} />
 
-          {/* countdown in lantern bubbles */}
+          {/* countdown in glowing lantern bubbles */}
           {s.showCountdown && countdown && (
             <section className="bg-[#0f766e] py-8 text-center text-white">
               <p className="font-hand text-3xl">Countdown to the fest</p>
               <div className="mt-3 flex justify-center gap-3">
                 {[['Days', countdown.days], ['Hours', countdown.hours], ['Minutes', countdown.minutes], ['Seconds', countdown.seconds]].map(([label, v]) => (
-                  <div key={label} className="rounded-full border-2 border-white/40 bg-white/10 px-4 py-3">
+                  <div key={label} className="relative rounded-3xl border-2 border-amber-300/60 bg-white/10 px-4 py-3 shadow-[0_0_24px_rgba(245,166,35,.45)]">
+                    <span className="absolute -top-2 left-1/2 h-2 w-6 -translate-x-1/2 rounded-full bg-amber-400" />
                     <p className="text-2xl font-bold">{v}</p>
                     <p className="text-xs">{label}</p>
                   </div>
@@ -150,7 +164,7 @@ export default function App() {
           {/* welcome / about + stats */}
           <section className="mx-auto max-w-4xl px-4 py-10 text-center">
             <h2 className="font-serif text-3xl font-bold">{s.institutionName || 'Welcome to our fest'}</h2>
-            <p className="mt-3 text-slate-600">{s.about || 'A Sibaq-style celebration of talent — programs, results, candidates and teams, all in one place. Add your about text in the admin panel.'}</p>
+            <p className="mt-3 text-slate-600">{s.about || 'A celebration of talent — programs, results, candidates and teams, all in one place. Come and make your magic with us!'}</p>
             <div className="mt-6 grid grid-cols-2 gap-3 md:grid-cols-4">
               {stats.map((st) => (
                 <div key={st.label} className="rounded-3xl bg-white p-4 shadow">
@@ -170,26 +184,27 @@ export default function App() {
               {playing && <SingingMan />}
               {!playing && <p className="font-hand text-2xl text-yellow-200">press play… a singer pops in here 🎤</p>}
               <div className="flex flex-wrap items-center justify-center gap-3">
-                <button onClick={() => setStudioOpen(true)} className="rounded-full bg-white px-6 py-3 font-bold text-orange-600 shadow">✏️ Start creating</button>
+                <button onClick={() => setStudioOpen(true)} className="rounded-full bg-white px-6 py-3 font-bold text-orange-600 shadow">Start creating</button>
                 <button onClick={toggleSong} className="flex items-center gap-2 rounded-full bg-yellow-300 px-5 py-3 font-bold text-orange-800 shadow">
                   {playing ? <Pause size={18} /> : <Play size={18} />} {playing ? 'Pause theme song' : 'Play theme song'}
                 </button>
               </div>
               <p className="flex items-center gap-1 text-sm text-white/80"><Music size={14} /> Theme song is an original WebAudio tune in this standalone version.</p>
             </div>
-            {/* big tilted pencil */}
+            {/* big tilted wooden pencil, drawn — not an emoji */}
             <button onClick={() => setStudioOpen(true)} className="anim-sway mx-auto mt-6 block" aria-label="Open drawing studio">
-              <span className="block text-7xl" role="img" aria-label="Pencil">✏️</span>
+              <svg viewBox="0 0 60 180" className="mx-auto h-28 w-10 -rotate-12 drop-shadow-xl" aria-hidden>
+                <rect x="18" y="0" width="24" height="26" rx="6" fill="#ec4899" />
+                <rect x="18" y="24" width="24" height="10" fill="#f59e0b" />
+                <rect x="18" y="34" width="24" height="96" fill="#fde68a" />
+                <rect x="26" y="34" width="8" height="96" fill="#fcd34d" />
+                <polygon points="18,130 42,130 30,168" fill="#fde68a" />
+                <polygon points="26,150 34,150 30,168" fill="#334155" />
+              </svg>
               <span className="mt-1 inline-block rounded-full bg-white px-3 py-0.5 font-hand text-xl text-orange-600 shadow">create!</span>
             </button>
           </section>
 
-          <footer className="bg-[#0f2a6b] px-4 py-8 text-center text-white">
-            <p className="font-hand text-3xl">MAKE YOUR MAGIC</p>
-            {s.institutionName && <p className="mt-1">{s.institutionName}</p>}
-            {s.venue && <p className="text-white/70">{s.venue}</p>}
-            <p className="mt-2 text-sm text-white/50">© Institution Program Website — made with MAKE YOUR MAGIC</p>
-          </footer>
         </>
       )}
 
@@ -201,15 +216,15 @@ export default function App() {
       {view === 'updates' && <UpdatesPage data={data} onHome={() => go('home')} />}
       {view === 'downloads' && <DownloadsPage data={data} onHome={() => go('home')} />}
 
-      {/* theme song mini-button, fixed (also on sub-pages) */}
-      <button
-        onClick={toggleSong}
-        className="fixed bottom-4 left-4 z-50 flex items-center gap-2 rounded-full bg-orange-500 px-4 py-2 font-bold text-white shadow-xl"
-      >
-        {playing ? <Pause size={16} /> : <Play size={16} />} {playing ? 'Pause' : 'Play theme song'}
-      </button>
+      {/* footer on EVERY page */}
+      <footer className="bg-[#0f2a6b] px-4 py-8 text-center text-white">
+        <p className="font-hand text-3xl">MAKE YOUR MAGIC</p>
+        {s.institutionName && <p className="mt-1">{s.institutionName}</p>}
+        {s.venue && <p className="text-white/70">{s.venue}</p>}
+        <p className="mt-2 text-sm text-white/50">© Institution Program Website — made with MAKE YOUR MAGIC</p>
+      </footer>
 
-      {/* gold admin dot */}
+      {/* gold admin dot — fixed on every page */}
       <button
         onClick={() => setAdminOpen(true)}
         className="fixed bottom-4 right-4 z-50 h-4 w-4 rounded-full bg-yellow-400 shadow ring-2 ring-yellow-200"

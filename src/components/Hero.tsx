@@ -18,11 +18,12 @@ function MagicLetters() {
       if (ch === 'M' && i > 0) word += 0 // keep simple: colour by word position below
       void word
       const t = i / (phrase.length - 1)
-      // arc: left 40% -> 88%, top dips up in the middle
-      const left = 40 + t * 48
-      const top = 62 - Math.sin(t * Math.PI) * 34
+      // Low arc band BELOW the headline (headline sits ~12-35%): letters
+      // sweep left->right at 50-66%, form the phrase, hold, then fade.
+      const left = 36 + t * 52
+      const top = 66 - Math.sin(t * Math.PI) * 16
       const colour = i < 4 ? colours[0] : i < 8 ? colours[1] : colours[2]
-      chars.push({ ch, colour, left, top, delay: 1.7 + t * 1.1 })
+      chars.push({ ch, colour, left, top, delay: 0.9 + t * 1.3 })
       i += 1
     }
     return chars
@@ -38,7 +39,7 @@ function MagicLetters() {
             top: `${l.top}%`,
             color: l.colour,
             textShadow: '0 2px 10px rgba(0,0,0,.35)',
-            animation: `magicLetter 3.4s ease-in-out ${l.delay}s infinite`,
+            animation: `magicLetter 5s ease-in-out ${l.delay}s infinite`,
             opacity: 0,
           }}
         >
@@ -49,20 +50,32 @@ function MagicLetters() {
   )
 }
 
-export default function Hero({ programName, themeLine }: { programName: string; themeLine: string }) {
+export default function Hero({ programName, themeLine, date, time, venue, institutionName }: { programName: string; themeLine: string; date?: string; time?: string; venue?: string; institutionName?: string }) {
   const words = themeLine.trim() ? themeLine.trim().split(/\s+/).slice(0, 3) : WORDS.map((w) => w.text)
+  const detailPills = [institutionName, date, time, venue].filter(Boolean)
   return (
     <section className="relative min-h-[92vh] overflow-hidden bg-[#2b6cff] text-white">
-      {/* sky, clouds, sparkles */}
-      <div className="anim-cloud absolute left-[12%] top-[16%] h-8 w-28 rounded-full bg-pink-200/80" />
-      <div className="anim-cloud absolute right-[10%] top-[24%] h-7 w-24 rounded-full bg-pink-200/70" style={{ animationDelay: '1.2s' }} />
-      <div className="anim-cloud absolute left-[6%] top-[46%] h-6 w-20 rounded-full bg-white/50" style={{ animationDelay: '2s' }} />
+      {/* fluffy clouds: overlapping circles, not flat pills */}
+      <div className="anim-cloud absolute left-[10%] top-[14%] opacity-90" aria-hidden>
+        <span className="absolute left-0 top-3 h-8 w-20 rounded-full bg-pink-200/90" />
+        <span className="absolute left-4 -top-1 h-9 w-9 rounded-full bg-pink-200/90" />
+        <span className="absolute left-10 top-0 h-7 w-7 rounded-full bg-pink-200/90" />
+      </div>
+      <div className="anim-cloud absolute right-[8%] top-[22%] opacity-90" style={{ animationDelay: '1.2s' }} aria-hidden>
+        <span className="absolute left-0 top-3 h-7 w-16 rounded-full bg-pink-200/80" />
+        <span className="absolute left-3 -top-1 h-8 w-8 rounded-full bg-pink-200/80" />
+        <span className="absolute left-9 top-0 h-6 w-6 rounded-full bg-pink-200/80" />
+      </div>
+      <div className="anim-cloud absolute left-[4%] top-[44%] opacity-70" style={{ animationDelay: '2s' }} aria-hidden>
+        <span className="absolute left-0 top-2 h-6 w-16 rounded-full bg-white/60" />
+        <span className="absolute left-3 -top-1 h-7 w-7 rounded-full bg-white/60" />
+      </div>
       <span className="anim-sparkle absolute left-[30%] top-[30%] text-2xl">✦</span>
       <span className="anim-sparkle absolute right-[22%] top-[14%] text-2xl" style={{ animationDelay: '.7s' }}>✦</span>
       <span className="anim-sparkle absolute left-[55%] top-[55%] text-xl" style={{ animationDelay: '1.4s' }}>✦</span>
 
       {/* giant orange hand from the top, with puppet threads */}
-      <div className="anim-hand-in absolute -left-4 -top-2 z-10 w-40 md:w-56" aria-hidden>
+      <div className="anim-hand-in absolute -left-4 -top-2 z-10 w-56 md:w-72" aria-hidden>
         <svg viewBox="0 0 200 170" className="w-full drop-shadow-lg">
           <g fill="#f97316" stroke="#ea580c" strokeWidth="3" strokeLinejoin="round">
             <path d="M10 10 Q60 -10 110 20 Q150 40 140 80 Q130 120 90 130 Q50 140 25 110 Q5 80 10 10 Z" />
@@ -75,13 +88,14 @@ export default function Hero({ programName, themeLine }: { programName: string; 
         </svg>
       </div>
 
-      {/* puppet threads */}
-      <svg className="absolute inset-0 h-full w-full" viewBox="0 0 100 100" preserveAspectRatio="none" aria-hidden>
-        <line x1="14" y1="8" x2="40" y2="68" stroke="white" strokeWidth="0.35" className="string-line" pathLength={100} style={{ animationDelay: '.6s' }} />
-        <line x1="17" y1="10" x2="44" y2="66" stroke="white" strokeWidth="0.35" className="string-line" pathLength={100} style={{ animationDelay: '.85s' }} />
-        <line x1="20" y1="12" x2="48" y2="70" stroke="white" strokeWidth="0.35" className="string-line" pathLength={100} style={{ animationDelay: '1.1s' }} />
-        <line x1="16" y1="9" x2="86" y2="74" stroke="white" strokeWidth="0.3" className="string-line" pathLength={100} style={{ animationDelay: '2.3s' }} />
-        <line x1="19" y1="11" x2="89" y2="72" stroke="white" strokeWidth="0.3" className="string-line" pathLength={100} style={{ animationDelay: '2.45s' }} />
+      {/* puppet threads — routed BEHIND the headline (z-0, bent down the
+          left and right edges, below the headline) so they never cross it */}
+      <svg className="absolute inset-0 z-0 h-full w-full" viewBox="0 0 100 100" preserveAspectRatio="none" aria-hidden>
+        <path d="M14 8 L26 42 L38 66" fill="none" stroke="white" strokeWidth="0.35" className="string-line" pathLength={100} style={{ animationDelay: '.2s' }} />
+        <path d="M17 10 L30 44 L44 64" fill="none" stroke="white" strokeWidth="0.35" className="string-line" pathLength={100} style={{ animationDelay: '.35s' }} />
+        <path d="M20 12 L33 46 L48 68" fill="none" stroke="white" strokeWidth="0.35" className="string-line" pathLength={100} style={{ animationDelay: '.5s' }} />
+        <path d="M16 9 C40 12 68 30 84 52 L88 72" fill="none" stroke="white" strokeWidth="0.3" className="string-line" pathLength={100} style={{ animationDelay: '.9s' }} />
+        <path d="M19 11 C44 14 72 32 86 54 L90 70" fill="none" stroke="white" strokeWidth="0.3" className="string-line" pathLength={100} style={{ animationDelay: '1.05s' }} />
       </svg>
 
       {/* headline */}
@@ -93,9 +107,19 @@ export default function Hero({ programName, themeLine }: { programName: string; 
             </span>
           ))}
         </h1>
-        <div className="mt-3 h-1.5 w-56 rounded-full bg-lime-400 md:w-72" />
+        <svg viewBox="0 0 300 14" className="mt-3 h-3 w-56 md:w-72" aria-hidden>
+          <path d="M4 9 Q 75 2 150 7 T 296 6" fill="none" stroke="#a3e635" strokeWidth="5" strokeLinecap="round" />
+          <path d="M20 12 Q 150 6 280 10" fill="none" stroke="#f5a623" strokeWidth="3" strokeLinecap="round" opacity=".8" />
+        </svg>
+        {detailPills.length > 0 && (
+          <div className="mt-4 flex flex-wrap justify-center gap-2">
+            {detailPills.map((p) => (
+              <span key={p} className="rounded-full bg-white/20 px-4 py-1 text-sm font-semibold backdrop-blur">{p}</span>
+            ))}
+          </div>
+        )}
         {programName && (
-          <p className="mt-4 rounded-full bg-white/20 px-4 py-1 text-sm font-semibold backdrop-blur">{programName}</p>
+          <p className="mt-3 rounded-full bg-white/20 px-4 py-1 text-sm font-semibold backdrop-blur">{programName}</p>
         )}
       </div>
 
@@ -105,31 +129,51 @@ export default function Hero({ programName, themeLine }: { programName: string; 
       </div>
       <MagicLetters />
 
-      {/* marionette footballer */}
-      <div className="anim-foot-in absolute bottom-[16%] left-1/2 z-20 -translate-x-1/2" aria-label="Marionette footballer shooting a football">
+      {/* marionette footballer — BIG, in a kicking pose, ball at his boot */}
+      <div className="anim-foot-in absolute bottom-[15%] left-1/2 z-20 -translate-x-1/2" aria-label="Marionette footballer shooting a football">
         <div className="anim-sway flex flex-col items-center">
           <div className="relative">
-            <div className="h-10 w-10 rounded-full bg-amber-800" />
-            <div className="absolute -top-1 left-1/2 h-3 w-10 -translate-x-1/2 rounded-full bg-slate-900" />
+            <div className="h-14 w-14 rounded-full bg-[#8d5a2b] shadow" />
+            <span className="absolute left-3 top-5 h-2 w-2 rounded-full bg-slate-900" />
+            <span className="absolute right-3 top-5 h-2 w-2 rounded-full bg-slate-900" />
+            <div className="absolute -top-1 left-1/2 h-3 w-12 -translate-x-1/2 rounded-full bg-slate-900" />
           </div>
-          <div className="mt-1 h-16 w-12 rounded-t-2xl bg-yellow-400 shadow" />
-          <div className="flex gap-1">
-            <div className="h-12 w-4 rounded bg-blue-900" />
-            <div className="anim-kick-leg h-12 w-4 rounded bg-blue-900" />
+          {/* arms out, yellow kit */}
+          <div className="mt-1 flex items-start">
+            <span className="mt-3 h-2.5 w-10 -rotate-45 rounded-full bg-[#f59e0b]" />
+            <div className="h-24 w-16 rounded-t-3xl bg-yellow-400 shadow">
+              <span className="mx-auto mt-2 block h-1 w-8 rounded-full bg-white/60" />
+              <span className="mx-auto mt-1 block font-hand text-xl font-bold leading-none text-orange-700">9</span>
+            </div>
+            <span className="mt-3 h-2.5 w-10 rotate-45 rounded-full bg-[#f59e0b]" />
           </div>
+          <div className="flex items-start gap-2">
+            <div className="h-16 w-5 rounded bg-blue-900" />
+            <div className="anim-kick-leg h-16 w-5 rounded bg-blue-900" />
+          </div>
+          <div className="-mt-1 flex gap-4">
+            <span className="h-4 w-8 rounded-full bg-yellow-300 shadow" />
+            <span className="h-4 w-8 rounded-full bg-yellow-300 shadow" />
+          </div>
+          {/* ball at his boot */}
+          <span className="absolute -bottom-2 right-2 flex h-9 w-9 items-center justify-center rounded-full border-2 border-slate-700 bg-white text-xs shadow-lg">⚽</span>
         </div>
       </div>
 
-      {/* marionette singer */}
-      <div className="anim-singer-in absolute bottom-[14%] right-[6%] z-20" aria-label="Marionette singer with a microphone">
+      {/* marionette singer — BIG, singing with mic held up */}
+      <div className="anim-singer-in absolute bottom-[13%] right-[4%] z-20" aria-label="Marionette singer with a microphone">
         <div className="anim-sway flex flex-col items-center">
-          <span className="anim-note absolute -top-8 left-2 text-xl">♪</span>
-          <span className="anim-note absolute -top-6 right-0 text-lg" style={{ animationDelay: '.8s' }}>♫</span>
-          <div className="h-9 w-9 rounded-full bg-amber-900" />
-          <div className="mt-1 h-14 w-11 rounded-t-2xl bg-pink-500 shadow" />
+          <span className="anim-note absolute -top-10 left-2 text-2xl">♪</span>
+          <span className="anim-note absolute -top-8 right-0 text-xl" style={{ animationDelay: '.8s' }}>♫</span>
+          <div className="h-12 w-12 rounded-full bg-amber-900 shadow">
+            <span className="mx-auto mt-7 block h-2 w-4 rounded-full bg-red-400" />
+          </div>
+          <div className="mt-1 h-20 w-14 rounded-t-3xl bg-pink-500 shadow" />
           <div className="mt-1 flex items-center gap-1">
-            <div className="h-2 w-8 -rotate-12 rounded-full bg-slate-800" />
-            <div className="h-4 w-4 rounded-full bg-slate-700" />
+            <span className="h-2.5 w-10 -rotate-12 rounded-full bg-[#8d5a2b]" />
+            <span className="flex h-6 w-6 items-center justify-center rounded-full bg-slate-800">
+              <span className="h-2.5 w-2.5 rounded-full bg-slate-400" />
+            </span>
           </div>
         </div>
       </div>
