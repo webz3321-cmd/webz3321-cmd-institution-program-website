@@ -1,0 +1,64 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+html { scroll-behavior: smooth; }
+body { font-family: system-ui, -apple-system, 'Segoe UI', sans-serif; }
+
+/* ---- Hero entrance (Sibaq-style, timed) ---- */
+@keyframes heroHandIn { from { transform: translate(-30%, -110%) rotate(-8deg); opacity: 0; } to { transform: translate(0, 0) rotate(0deg); opacity: 1; } }
+@keyframes stringDraw { from { stroke-dashoffset: 100; opacity: 0; } to { stroke-dashoffset: 0; opacity: 1; } }
+@keyframes heroFootIn { from { transform: translate(-50%, 60px) scale(.7); opacity: 0; } to { transform: translate(-50%, 0) scale(1); opacity: 1; } }
+@keyframes singerIn { from { transform: translateY(50px) scale(.7); opacity: 0; } to { transform: translateY(0) scale(1); opacity: 1; } }
+@keyframes ballFly {
+  0% { left: 38%; top: 68%; opacity: 0; transform: scale(.7) rotate(0deg); }
+  8% { opacity: 1; }
+  35% { left: 55%; top: 34%; transform: scale(1) rotate(300deg); }
+  60% { left: 76%; top: 30%; transform: scale(1) rotate(560deg); }
+  78% { left: 88%; top: 46%; opacity: 1; transform: scale(.9) rotate(720deg); }
+  92% { opacity: 0; }
+  100% { left: 38%; top: 68%; opacity: 0; transform: scale(.7) rotate(720deg); }
+}
+@keyframes kickLeg { 0%, 18% { transform: rotate(24deg); } 30% { transform: rotate(-38deg); } 45%, 100% { transform: rotate(24deg); } }
+@keyframes noteFloat { 0% { transform: translateY(0) scale(.8); opacity: 0; } 20% { opacity: 1; } 100% { transform: translateY(-46px) scale(1.15); opacity: 0; } }
+@keyframes sway { 0%, 100% { transform: rotate(-2.5deg); } 50% { transform: rotate(2.5deg); } }
+@keyframes handDrift { 0%, 100% { transform: translateY(0) rotate(0deg); } 50% { transform: translateY(10px) rotate(1.5deg); } }
+@keyframes cloudDrift { 0% { transform: translateX(-12px); } 100% { transform: translateX(18px); } }
+@keyframes sparkle { 0%, 100% { opacity: .25; transform: scale(.7); } 50% { opacity: 1; transform: scale(1.2); } }
+@keyframes magicLetter {
+  0% { opacity: 0; transform: translateY(14px) scale(.6) rotate(-8deg); }
+  12% { opacity: 1; transform: translateY(0) scale(1.1) rotate(2deg); }
+  70% { opacity: 1; transform: translateY(-4px) scale(1); }
+  88%, 100% { opacity: 0; transform: translateY(-10px) scale(.9); }
+}
+@keyframes marquee { from { transform: translateX(0); } to { transform: translateX(-50%); } }
+@keyframes rocketUp { 0% { transform: translateY(0) rotate(0deg); opacity: 1; } 100% { transform: translateY(-110vh) rotate(6deg); opacity: 1; } }
+@keyframes flameFlicker { 0%, 100% { transform: scaleY(1); } 50% { transform: scaleY(1.35); } }
+@keyframes keeperDiveL { 0% { transform: translateX(0) rotate(0deg); } 100% { transform: translateX(-34%) rotate(-38deg); } }
+@keyframes keeperDiveR { 0% { transform: translateX(0) rotate(0deg); } 100% { transform: translateX(34%) rotate(38deg); } }
+@keyframes popIn { from { transform: scale(.85); opacity: 0; } to { transform: scale(1); opacity: 1; } }
+@keyframes singMouth { 0%, 100% { transform: scaleY(.4); } 50% { transform: scaleY(1); } }
+
+.anim-hand-in { animation: heroHandIn 1s ease-out both, handDrift 5s ease-in-out 1.2s infinite; }
+.anim-foot-in { animation: heroFootIn .9s ease-out .9s both; }
+.anim-singer-in { animation: singerIn .9s ease-out 2.4s both; }
+.anim-ball-fly { animation: ballFly 3.4s ease-in-out 1.5s infinite; }
+.anim-kick-leg { animation: kickLeg 3.4s ease-in-out 1.5s infinite; transform-origin: 20% 10%; }
+.anim-sway { animation: sway 3.2s ease-in-out infinite; transform-origin: top center; }
+.anim-cloud { animation: cloudDrift 7s ease-in-out infinite alternate; }
+.anim-sparkle { animation: sparkle 2.2s ease-in-out infinite; }
+.anim-note { animation: noteFloat 2.4s ease-in infinite; }
+.anim-marquee { animation: marquee 22s linear infinite; }
+.anim-rocket { animation: rocketUp 1.8s ease-in forwards; }
+.anim-flame { animation: flameFlicker .25s ease-in-out infinite; transform-origin: top center; }
+.anim-pop { animation: popIn .35s ease-out both; }
+.anim-sing-mouth { animation: singMouth .5s ease-in-out infinite; transform-origin: center; }
+
+.string-line { stroke-dasharray: 100; stroke-dashoffset: 100; animation: stringDraw .9s ease-out forwards; }
+
+@media (prefers-reduced-motion: reduce) {
+  .anim-hand-in, .anim-foot-in, .anim-singer-in, .anim-ball-fly, .anim-kick-leg,
+  .anim-sway, .anim-cloud, .anim-sparkle, .anim-note, .anim-marquee, .anim-rocket,
+  .anim-flame, .anim-pop, .anim-sing-mouth { animation: none !important; }
+  .string-line { stroke-dashoffset: 0 !important; animation: none !important; }
+}
